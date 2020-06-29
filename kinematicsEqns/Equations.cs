@@ -35,7 +35,7 @@ namespace kinematicsEqns
             }
         }
 
-        internal void GetTime()
+        internal void CalculateTime()
         {
             GetParms(MetricType.Time);
             switch (_unassigned) 
@@ -70,17 +70,30 @@ namespace kinematicsEqns
         }
 
 
-        internal void GetDistance()
+        internal void CalculateDistance()
+        {
+            GetParms(MetricType.Distance);
+            switch (_unassigned)
+            {
+                case MetricType.Time:
+                    // 2*a*s = v_f^2 - v_0^2
+                    s = (Math.Pow(v_f.Value, 2.0) - Math.Pow(v_0.Value, 2.0)) / (2*a);
+                    break;
+                case MetricType.FinalVelocity:
+                    // s=v_0*t + 1/2*a*t^2
+                    s = v_0 * time + 1 / 2 * a * Math.Pow(time.Value, 2.0);
+                    break;
+            }
+
+            Result = s;
+        }
+
+        internal void CalculateInitialVelocity()
         {
             throw new NotImplementedException();
         }
 
-        internal void GetInitialVelocity()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void GetFinalVelocity()
+        internal void CalculateFinalVelocity()
         {
             throw new NotImplementedException();
         }
